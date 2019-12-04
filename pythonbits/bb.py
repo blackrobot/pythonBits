@@ -374,19 +374,19 @@ class VideoSubmission(BbSubmission):
 
     def _render_video_codec(self):
         video_track = self['tracks']['video']
-        # norm_bitrate = (float(bit_rate) /
-        #     (video_track.width*video_track.height))
-        if video_track['codec'] in ('V_MPEG4/ISO/AVC', 'AVC'):
+        codec = video_track.get('codec', video_track['codec_id'])
+
+        if codec in ('V_MPEG4/ISO/AVC', 'AVC'):
             if ('writing_library' in video_track and
                     'x264' in video_track['writing_library']):
                 return 'x264'
             else:
                 return 'H.264'
-        elif video_track['codec'] == 'XVID':
+        elif codec == 'XVID':
             return 'XVid'
         else:
             raise Exception("Unknown or unsupported video codec",
-                            video_track['codec'],
+                            codec,
                             video_track['writing_library'])
 
     def _render_audio_codec(self):
